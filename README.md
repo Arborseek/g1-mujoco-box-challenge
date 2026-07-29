@@ -50,6 +50,8 @@ python scripts/run_sim.py --demo --headless
 
 官方基线自动 demo（2 箱搬运），源文件：`assets/demo_2boxes.mp4`
 
+https://github.com/user-attachments/assets/9517a277-e760-495d-aa7d-0f57cf401253
+
 自行录制：
 
 ```bash
