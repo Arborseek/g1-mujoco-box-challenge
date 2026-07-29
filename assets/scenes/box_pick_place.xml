@@ -1,0 +1,85 @@
+<mujoco model="unitree_g1_box_pick_place">
+  <include file="g1_with_hands.xml"/>
+
+  <statistic center="1.0 0 0.6" extent="5.0"/>
+
+  <visual>
+    <headlight diffuse="0.6 0.6 0.6" ambient="0.3 0.3 0.3" specular="0 0 0"/>
+    <rgba haze="0.15 0.25 0.35 1"/>
+    <global azimuth="160" elevation="-18"/>
+  </visual>
+
+  <asset>
+    <texture type="skybox" builtin="gradient" rgb1="0.3 0.5 0.7" rgb2="0 0 0" width="512" height="3072"/>
+    <texture type="2d" name="groundplane" builtin="checker" mark="edge"
+             rgb1="0.2 0.3 0.4" rgb2="0.1 0.2 0.3" markrgb="0.8 0.8 0.8" width="300" height="300"/>
+    <material name="groundplane" texture="groundplane" texuniform="true" texrepeat="10 10" reflectance="0.2"/>
+    <material name="table_wood" rgba="0.55 0.35 0.18 1"/>
+    <material name="table_leg" rgba="0.40 0.25 0.12 1"/>
+    <material name="drop_zone_mat" rgba="0.2 0.85 0.3 0.40"/>
+    <material name="pick_zone_mat" rgba="0.85 0.35 0.2 0.35"/>
+    <material name="path_mat" rgba="0.4 0.6 0.9 0.30"/>
+  </asset>
+
+  <worldbody>
+    <geom name="floor" type="plane" size="0 0 0.05" material="groundplane"/>
+
+    <!-- 地面拾取区 -->
+    <body name="pick_zone" pos="-1.55 0 0.005">
+      <geom name="pick_zone_marker" type="box" size="0.55 0.55 0.005"
+            material="pick_zone_mat" contype="0" conaffinity="0"/>
+    </body>
+
+    <!-- 行走路径 -->
+    <geom name="walk_path" type="box" pos="1.05 0 0.004" size="2.1 0.10 0.004"
+          material="path_mat" contype="0" conaffinity="0"/>
+
+    <!-- 目标桌面：台面高度约 0.98m（接近 G1 腰部） -->
+    <body name="target_table" pos="3.5 0 0">
+      <geom name="target_table_top" type="box" size="0.50 0.60 0.025" pos="0 0 0.955" material="table_wood"/>
+      <geom name="drop_zone_marker" type="box" size="0.45 0.45 0.006" pos="0 0 0.982"
+            material="drop_zone_mat" contype="0" conaffinity="0"/>
+      <geom name="leg_fl" type="box" pos="-0.45 -0.55 0.4675" size="0.04 0.04 0.4675" material="table_leg"/>
+      <geom name="leg_fr" type="box" pos="-0.45  0.55 0.4675" size="0.04 0.04 0.4675" material="table_leg"/>
+      <geom name="leg_bl" type="box" pos=" 0.45 -0.55 0.4675" size="0.04 0.04 0.4675" material="table_leg"/>
+      <geom name="leg_br" type="box" pos=" 0.45  0.55 0.4675" size="0.04 0.04 0.4675" material="table_leg"/>
+    </body>
+
+    <!-- 10 个箱子：24cm 立方体，2 行 x 5 列 -->
+    <body name="box_0" pos="-1.40 -0.56 0.12"><freejoint/><geom name="box_0_geom" type="box" size="0.12 0.12 0.12" mass="3.5" rgba="0.85 0.25 0.25 1" friction="1.5 0.02 0.002"/></body>
+    <body name="box_1" pos="-1.40 -0.28 0.12"><freejoint/><geom name="box_1_geom" type="box" size="0.12 0.12 0.12" mass="3.5" rgba="0.90 0.35 0.25 1" friction="1.5 0.02 0.002"/></body>
+    <body name="box_2" pos="-1.40  0.00 0.12"><freejoint/><geom name="box_2_geom" type="box" size="0.12 0.12 0.12" mass="3.5" rgba="0.95 0.45 0.25 1" friction="1.5 0.02 0.002"/></body>
+    <body name="box_3" pos="-1.40  0.28 0.12"><freejoint/><geom name="box_3_geom" type="box" size="0.12 0.12 0.12" mass="3.5" rgba="0.85 0.55 0.25 1" friction="1.5 0.02 0.002"/></body>
+    <body name="box_4" pos="-1.40  0.56 0.12"><freejoint/><geom name="box_4_geom" type="box" size="0.12 0.12 0.12" mass="3.5" rgba="0.75 0.65 0.25 1" friction="1.5 0.02 0.002"/></body>
+    <body name="box_5" pos="-1.68 -0.56 0.12"><freejoint/><geom name="box_5_geom" type="box" size="0.12 0.12 0.12" mass="3.5" rgba="0.25 0.45 0.85 1" friction="1.5 0.02 0.002"/></body>
+    <body name="box_6" pos="-1.68 -0.28 0.12"><freejoint/><geom name="box_6_geom" type="box" size="0.12 0.12 0.12" mass="3.5" rgba="0.35 0.55 0.90 1" friction="1.5 0.02 0.002"/></body>
+    <body name="box_7" pos="-1.68  0.00 0.12"><freejoint/><geom name="box_7_geom" type="box" size="0.12 0.12 0.12" mass="3.5" rgba="0.45 0.65 0.95 1" friction="1.5 0.02 0.002"/></body>
+    <body name="box_8" pos="-1.68  0.28 0.12"><freejoint/><geom name="box_8_geom" type="box" size="0.12 0.12 0.12" mass="3.5" rgba="0.55 0.75 0.95 1" friction="1.5 0.02 0.002"/></body>
+    <body name="box_9" pos="-1.68  0.56 0.12"><freejoint/><geom name="box_9_geom" type="box" size="0.12 0.12 0.12" mass="3.5" rgba="0.65 0.85 0.95 1" friction="1.5 0.02 0.002"/></body>
+
+    <body name="spawn_marker" pos="-0.5 0 0.005">
+      <geom type="cylinder" size="0.18 0.005" rgba="0.9 0.9 0.2 0.5" contype="0" conaffinity="0"/>
+    </body>
+    <body name="table_stand_marker" pos="2.75 0 0.005">
+      <geom type="cylinder" size="0.18 0.005" rgba="0.2 0.9 0.4 0.5" contype="0" conaffinity="0"/>
+    </body>
+  </worldbody>
+
+  <equality>
+    <!-- 抓取后焊在躯干前方，比单手腕稳定 -->
+    <weld name="grasp_weld_0" body1="torso_link" body2="box_0" relpose="0.20 0 -0.10 1 0 0 0" active="false" solref="0.02 1"/>
+    <weld name="grasp_weld_1" body1="torso_link" body2="box_1" relpose="0.20 0 -0.10 1 0 0 0" active="false" solref="0.02 1"/>
+    <weld name="grasp_weld_2" body1="torso_link" body2="box_2" relpose="0.20 0 -0.10 1 0 0 0" active="false" solref="0.02 1"/>
+    <weld name="grasp_weld_3" body1="torso_link" body2="box_3" relpose="0.20 0 -0.10 1 0 0 0" active="false" solref="0.02 1"/>
+    <weld name="grasp_weld_4" body1="torso_link" body2="box_4" relpose="0.20 0 -0.10 1 0 0 0" active="false" solref="0.02 1"/>
+    <weld name="grasp_weld_5" body1="torso_link" body2="box_5" relpose="0.20 0 -0.10 1 0 0 0" active="false" solref="0.02 1"/>
+    <weld name="grasp_weld_6" body1="torso_link" body2="box_6" relpose="0.20 0 -0.10 1 0 0 0" active="false" solref="0.02 1"/>
+    <weld name="grasp_weld_7" body1="torso_link" body2="box_7" relpose="0.20 0 -0.10 1 0 0 0" active="false" solref="0.02 1"/>
+    <weld name="grasp_weld_8" body1="torso_link" body2="box_8" relpose="0.20 0 -0.10 1 0 0 0" active="false" solref="0.02 1"/>
+    <weld name="grasp_weld_9" body1="torso_link" body2="box_9" relpose="0.20 0 -0.10 1 0 0 0" active="false" solref="0.02 1"/>
+  </equality>
+
+  <contact>
+    <exclude body1="pelvis" body2="target_table"/>
+  </contact>
+</mujoco>

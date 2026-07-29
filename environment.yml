@@ -1,0 +1,12 @@
+name: unitree_pick_place
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - pip
+  - numpy>=1.24,<2
+  - pyyaml>=6.0
+  - pip:
+    - mujoco>=3.1.0
+    - torch>=2.0.0

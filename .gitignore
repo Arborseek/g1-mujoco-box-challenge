@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+.venv/
+third_party/
+*.egg-info/
+.DS_Store
+MUJOCO_LOG.TXT
+
+# G1 模型由 setup.sh 从 mujoco_menagerie 下载
+assets/robots/g1/assets/
+assets/robots/g1/g1*.xml
+assets/robots/g1/scene*.xml
+assets/robots/g1/box_pick_place.xml
+assets/robots/g1/*.png
+assets/robots/g1/README.md
+assets/robots/g1/LICENSE
+third_party/g1_policy/motion.pt

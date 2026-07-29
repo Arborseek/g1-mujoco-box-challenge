@@ -1,0 +1,76 @@
+robot: g1
+robot_model: g1_with_hands
+num_boxes: 10
+
+spawn:
+  pos: [-0.78, 0.0, 0.79]
+  yaw: 0.0
+
+pick_zone:
+  center: [0.15, 0.0, 0.85]
+  half_size: [0.48, 0.58, 0.15]
+
+drop_zone:
+  center: [3.5, 0.0, 0.85]
+  half_size: [0.45, 0.45, 0.12]
+
+walk:
+  table_stand: [2.85, -0.65]
+  arrive_threshold: 0.22
+  pick_arrive_threshold: 0.08
+  route_arrive_threshold: 0.20
+  pick_stand_offset: -0.22
+  pick_stand_min_x: -0.52
+  pick_stand_west_max_x: -0.42
+  pick_stand_east_max_x: 0.05
+  pick_south_y: -0.52
+  pick_south_y_row2: -0.32
+  retreat_back: 0.35
+  # 南侧通道（远离拾取台/放桌）
+  path_lane_y: -0.90
+  path_west_x: -0.90
+  # 通道内路点（前面会自动加：后退→西侧→下通道）
+  carry_route:
+    - [3.05, -0.90]
+    - [2.85, -0.65]
+  return_route:
+    - [-0.78, 0.0]
+  reach_steps: 220
+  place_steps: 180
+  carry_cmd_max_forward: 0.25
+  carry_balance_steps: 300
+  walk_assist_speed: 0.28
+  walk_assist_kp: 420.0
+  walk_assist_kd: 60.0
+  route_stuck_steps: 4000
+  route_stuck_dist: 0.38
+
+box:
+  half_size: 0.12
+  mass: 0.05
+
+placement:
+  velocity_threshold: 0.15
+  height_min: 0.80
+
+simulation:
+  dt: 0.002
+  enable_elastic_band: false
+  carry_elastic_band: true
+  carry_band_stiffness: 1200.0
+  carry_band_damping: 120.0
+
+grasp:
+  hand_body: right_wrist_yaw_link
+  distance_threshold: 0.48
+  box_half_size: 0.12
+  # 抓取：相对手腕坐标系，箱心在掌心前上方
+  palm_in_wrist: [0.042, -0.003, 0.0]
+  box_in_palm: [0.06, 0.0, 0.05]
+  # 搬运：相对双掌中点 [前, 左, 上]（米）
+  carry_palm_offset: [0.02, 0.0, 0.04]
+
+table:
+  top_height: 0.73
+  stand_x: 2.85
+  stand_y: -0.65

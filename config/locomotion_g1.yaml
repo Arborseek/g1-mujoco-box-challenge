@@ -1,0 +1,33 @@
+# 宇树 unitree_rl_gym G1 行走策略参数（12 腿关节）
+policy_path: third_party/g1_policy/motion.pt
+
+control_decimation: 10
+simulation_dt: 0.002
+
+num_actions: 12
+num_obs: 47
+
+kps: [100, 100, 100, 150, 40, 40, 100, 100, 100, 150, 40, 40]
+kds: [2, 2, 2, 4, 2, 2, 2, 2, 2, 4, 2, 2]
+
+default_angles: [-0.1, 0.0, 0.0, 0.3, -0.2, 0.0, -0.1, 0.0, 0.0, 0.3, -0.2, 0.0]
+
+ang_vel_scale: 0.25
+dof_pos_scale: 1.0
+dof_vel_scale: 0.05
+action_scale: 0.25
+cmd_scale: [2.0, 2.0, 0.25]
+
+# 行走速度指令（body frame: vx前进, vy侧向, omega偏航）
+cmd_max_forward: 0.45
+cmd_min_forward: 0.22
+cmd_turn_forward: 0.12
+cmd_turn_yaw_threshold: 0.35
+speed_distance_gain: 0.75
+cmd_max_lateral: 0.18
+cmd_max_yaw: 0.40
+phase_period: 0.8
+
+# 关节在 qpos/qvel 中的起始索引（freejoint 占 7/6）
+qpos_start: 7
+qvel_start: 6
