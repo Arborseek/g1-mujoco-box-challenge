@@ -364,7 +364,7 @@ z_k \leftarrow z_{\mathrm{spawn}}, \qquad \mathbf{v}_k \leftarrow \mathbf{0}
 ## 目录结构
 
 ```
-contest/
+g1-mujoco-box-challenge/
 ├── config/
 │   ├── task.yaml                 # 任务 / 行走 / 抓取参数
 │   └── locomotion_g1.yaml        # RL 策略与 PD 增益
