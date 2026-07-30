@@ -75,17 +75,17 @@ MUJOCO_GL=egl python scripts/record_demo.py --target-boxes 2
 
 ## 任务定义
 
-设仿真场景中共有 \(N=10\) 个箱体，编号 \(\mathcal{B}=\{0,1,\ldots,9\}\)。每个箱体 \(i\) 的状态由位姿 \(\mathbf{p}_{i}\in\mathbb{R}^3\) 与线速度 \(\mathbf{v}_{i}\in\mathbb{R}^3\) 描述。
+设仿真场景中共有 $N=10$ 个箱体，编号 $\mathcal{B}=\{0,1,\ldots,9\}$。每个箱体 $i$ 的状态由位姿 $\mathbf{p}_i\in\mathbb{R}^3$ 与线速度 $\mathbf{v}_i\in\mathbb{R}^3$ 描述。
 
 | 符号 / 参数 | 取值 / 含义 |
 |-------------|-------------|
 | 机器人平台 | 宇树 G1 + 12-DoF 灵巧手 |
-| 拾取区 \(\mathcal{P}\) | 中心 \((0.15, 0, 0.85)\) m，箱阵列 \(2\times5\) |
-| 放置区 \(\mathcal{D}\) | 中心 \((3.5, 0, 0.85)\) m，半尺寸 \((0.45, 0.45, 0.12)\) m |
-| 放货桌面高度 | \(h_{\mathrm{table}} = 0.73\) m |
-| 成功放置集合 \(\mathcal{S}\subseteq\mathcal{B}\) | 初始为空，逐箱递增 |
+| 拾取区 $\mathcal{P}$ | 中心 $(0.15, 0, 0.85)$ m，箱阵列 $2\times5$ |
+| 放置区 $\mathcal{D}$ | 中心 $(3.5, 0, 0.85)$ m，半尺寸 $(0.45, 0.45, 0.12)$ m |
+| 放货桌面高度 | $h_{\mathrm{table}} = 0.73$ m |
+| 成功放置集合 $\mathcal{S}\subseteq\mathcal{B}$ | 初始为空，逐箱递增 |
 
-**任务目标：** 将所有未放置箱体 \(i\in\mathcal{B}\setminus\mathcal{S}\) 依次搬运至放置区并完成稳定放置，即 \(|\mathcal{S}|=N\)。
+**任务目标：** 将所有未放置箱体 $i\in\mathcal{B}\setminus\mathcal{S}$ 依次搬运至放置区并完成稳定放置，即 $|\mathcal{S}|=N$。
 
 ---
 
@@ -106,11 +106,11 @@ MUJOCO_GL=egl python scripts/record_demo.py --target-boxes 2
 └─────────────────────────────────────────────────────────┘
 ```
 
-每个仿真步 \(k\) 的执行顺序为：
+每个仿真步 $k$ 的执行顺序为：
 
 `stabilize_boxes` → `pre_physics` → `mj_step(Δt)` → `post_physics` → `sync_carried_box` → `task.update`
 
-其中 \(\Delta t = 0.002\) s（见 `config/task.yaml`）。
+其中 $\Delta t = 0.002$ s（见 `config/task.yaml`）。
 
 ---
 
@@ -120,7 +120,7 @@ MUJOCO_GL=egl python scripts/record_demo.py --target-boxes 2
 
 #### 1.1 观测向量
 
-策略网络 \(\pi_{\theta}\) 的输入观测 \(\mathbf{o}_{k} \in \mathbb{R}^{n_{\mathrm{obs}}}\) 由本体感知与步态相位构成（列向量拼接）：
+策略网络 $\pi_{\theta}$ 的输入观测 $\mathbf{o}_{k} \in \mathbb{R}^{n_{\mathrm{obs}}}$ 由本体感知与步态相位构成（列向量拼接）：
 
 ```math
 \mathbf{o}_k = \begin{bmatrix}
@@ -139,15 +139,15 @@ MUJOCO_GL=egl python scripts/record_demo.py --target-boxes 2
 
 | 符号 | 维度 | 含义 |
 |------|------|------|
-| \(\mathbf{\omega}_{k}\) | \(\mathbb{R}^3\) | 骨盆角速度（经 `ang_vel_scale` 缩放） |
-| \(\mathbf{g}_{k}\) | \(\mathbb{R}^3\) | 重力方向在机体坐标系下的投影 |
-| \(\mathbf{c}_{k}\) | \(\mathbb{R}^3\) | 速度指令 \(\left[v_{x}, v_{y}, \omega_{z}\right]^\top\)（经 `cmd_scale` 缩放） |
-| \(\tilde{\mathbf{q}}_{k}\) | \(\mathbb{R}^{12}\) | 腿部关节角偏差 \((\mathbf{q}_{k} - \mathbf{q}_{0}) \cdot s_{q}\) |
-| \(\mathbf{v}_{k}^{q,\mathrm{sc}}\) | \(\mathbb{R}^{12}\) | 腿部关节角速度 \(\mathbf{v}_{k}^{q} \cdot s_{dq}\)（`dof_vel_scale`） |
-| \(\mathbf{a}_{k-1}\) | \(\mathbb{R}^{12}\) | 上一控制周期的策略输出 |
-| \(\phi_{k}\) | 标量 | 步态相位 \(2\pi (t_{k} \bmod T_{p}) / T_{p}\)，\(T_{p} = 0.8\) s |
+| $\mathbf{\omega}_k$ | $\mathbb{R}^3$ | 骨盆角速度（经 `ang_vel_scale` 缩放） |
+| $\mathbf{g}_k$ | $\mathbb{R}^3$ | 重力方向在机体坐标系下的投影 |
+| $\mathbf{c}_k$ | $\mathbb{R}^3$ | 速度指令 $[v_x, v_y, \omega_z]^\top$（经 `cmd_scale` 缩放） |
+| $\tilde{\mathbf{q}}_k$ | $\mathbb{R}^{12}$ | 腿部关节角偏差 $(\mathbf{q}_k - \mathbf{q}_0) \cdot s_q$ |
+| $\mathbf{v}_k^{q,\mathrm{sc}}$ | $\mathbb{R}^{12}$ | 腿部关节角速度 $\mathbf{v}_k^{q} \cdot s_{dq}$（`dof_vel_scale`） |
+| $\mathbf{a}_{k-1}$ | $\mathbb{R}^{12}$ | 上一控制周期的策略输出 |
+| $\phi_k$ | 标量 | 步态相位 $2\pi (t_k \bmod T_p) / T_p$，$T_p = 0.8$ s |
 
-重力投影 \(\mathbf{g}_{k}\) 由单位四元数 \(\mathbf{q} = \left[q_{w}, q_{x}, q_{y}, q_{z}\right]^\top\) 解析求得：
+重力投影 $\mathbf{g}_k$ 由单位四元数 $\mathbf{q} = [q_w, q_x, q_y, q_z]^\top$ 解析求得：
 
 ```math
 \mathbf{g}_k = \begin{bmatrix}
@@ -159,13 +159,13 @@ MUJOCO_GL=egl python scripts/record_demo.py --target-boxes 2
 
 #### 1.2 动作与 PD 力矩控制
 
-策略以降采样率 \(f_{\mathrm{ctrl}} = 1 / (N_{d} \Delta t)\)（\(N_{d} =\) `control_decimation`）输出动作 \(\mathbf{a}_{k} \in \mathbb{R}^{12}\)，映射为目标关节角：
+策略以降采样率 $f_{\mathrm{ctrl}} = 1 / (N_d \Delta t)$（$N_d =$ `control_decimation`）输出动作 $\mathbf{a}_k \in \mathbb{R}^{12}$，映射为目标关节角：
 
 ```math
 \mathbf{q}_k^{\mathrm{des}} = \mathbf{q}_0 + \sigma_a \mathbf{a}_k
 ```
 
-其中 \(\mathbf{q}_{0}\) 为默认站姿，\(\sigma_{a}\) 为 `action_scale`。各关节 PD 力矩为：
+其中 $\mathbf{q}_0$ 为默认站姿，$\sigma_a$ 为 `action_scale`。各关节 PD 力矩为：
 
 ```math
 \mathbf{\tau}_k = \mathbf{K}_p (\mathbf{q}_k^{\mathrm{des}} - \mathbf{q}_k) + \mathbf{K}_d (\mathbf{v}_k^{q,\mathrm{des}} - \mathbf{v}_k^{q})
@@ -175,21 +175,21 @@ MUJOCO_GL=egl python scripts/record_demo.py --target-boxes 2
 
 #### 1.3 路点导航与速度指令生成
 
-给定骨盆平面目标 \(\mathbf{x}^{\mathrm{tgt}} = \left[x^{\mathrm{tgt}}, y^{\mathrm{tgt}}\right]^\top\)，记当前位置 \(\mathbf{x}_{k} = \left[x_{k}, y_{k}\right]^\top\)，相对位移 \(\mathbf{d}_{k} = \mathbf{x}^{\mathrm{tgt}} - \mathbf{x}_{k}\)，距离 \(r_{k} = \|\mathbf{d}_{k}\|\)。
+给定骨盆平面目标 $\mathbf{x}^{\mathrm{tgt}} = [x^{\mathrm{tgt}}, y^{\mathrm{tgt}}]^\top$，记当前位置 $\mathbf{x}_k = [x_k, y_k]^\top$，相对位移 $\mathbf{d}_k = \mathbf{x}^{\mathrm{tgt}} - \mathbf{x}_k$，距离 $r_k = \|\mathbf{d}_k\|$。
 
-到达判定（阈值 \(\epsilon_{\mathrm{arr}}\)）：
+到达判定（阈值 $\epsilon_{\mathrm{arr}}$）：
 
 ```math
 r_k \le \epsilon_{\mathrm{arr}} \Rightarrow \mathbf{c}_k = \mathbf{0}
 ```
 
-否则，设当前偏航角 \(\psi_{k} = 2\arctan(q_{z}, q_{w})\)，期望偏航角 \(\psi_{k}^{\mathrm{des}} = \mathrm{atan2}(d_{y}, d_{x})\)，偏航误差 \(\Delta\psi_{k}\) 为 \(\psi_{k}^{\mathrm{des}} - \psi_{k}\) 归一化到 \(\left[-\pi, \pi\right]\)：
+否则，设当前偏航角 $\psi_k = 2\arctan(q_z, q_w)$，期望偏航角 $\psi_k^{\mathrm{des}} = \mathrm{atan2}(d_y, d_x)$，偏航误差 $\Delta\psi_k$ 为 $\psi_k^{\mathrm{des}} - \psi_k$ 归一化到 $[-\pi, \pi]$：
 
 ```math
 \Delta\psi_k = \mathrm{atan2}(\sin(\psi_k^{\mathrm{des}} - \psi_k),\, \cos(\psi_k^{\mathrm{des}} - \psi_k))
 ```
 
-分段速度指令：当 \(|\Delta\psi_{k}| > \psi_{\mathrm{turn}}\) 时（先转向）
+分段速度指令：当 $|\Delta\psi_k| > \psi_{\mathrm{turn}}$ 时（先转向）
 
 ```math
 \mathbf{c}_k = \left[v_x^{\mathrm{turn}},\, 0,\, \min(\omega_{\max}, \max(-\omega_{\max}, \alpha_\omega \Delta\psi_k))\right]^\top
@@ -201,7 +201,13 @@ r_k \le \epsilon_{\mathrm{arr}} \Rightarrow \mathbf{c}_k = \mathbf{0}
 \mathbf{c}_k = \left[\min(v_x^{\max}, \max(v_x^{\min}, \beta r_k)),\, v_y^{\mathrm{lat}},\, \min(\omega_{\max}, \max(-\omega_{\max}, \alpha_\psi \Delta\psi_k))\right]^\top
 ```
 
-其中横向分量 \(v_{y}^{\mathrm{lat}}\) 为 \(\mathbf{d}_{k}\) 在机体左向 \(\mathbf{e}_{\mathrm{left}} = \left[-\sin\psi_{k}, \cos\psi_{k}\right]^\top\) 上的投影。持箱搬运时 \(v_{x}^{\max}\) 被限制为 `carry_cmd_max_forward`（默认 0.25），以降低偏载失稳风险。
+其中横向分量 $v_y^{\mathrm{lat}}$ 为 $\mathbf{d}_{k}$ 在机体左向 $\mathbf{e}_{\mathrm{left}}$ 上的投影：
+
+```math
+\mathbf{e}_{\mathrm{left}} = [-\sin\psi_k, \cos\psi_k]^\top
+```
+
+持箱搬运时 $v_x^{\max}$ 被限制为 `carry_cmd_max_forward`（默认 0.25），以降低偏载失稳风险。
 
 ---
 
@@ -213,7 +219,7 @@ r_k \le \epsilon_{\mathrm{arr}} \Rightarrow \mathbf{c}_k = \mathbf{0}
 \mathbf{F}_k^{\mathrm{assist}} = m \left[\mathbf{K}_v (\mathbf{v}_k^{\mathrm{des}} - \mathbf{v}_k) - \mathbf{K}_d^{\mathrm{assist}} \mathbf{v}_k \right]
 ```
 
-其中 \(m\) 为骨盆质量。期望速度与方向单位向量：
+其中 $m$ 为骨盆质量。期望速度与方向单位向量：
 
 ```math
 \mathbf{v}_k^{\mathrm{des}} = \frac{\mathbf{d}_k}{\max(r_k, 10^{-6})} \cdot \min\left(v_s, \max(0.12, 0.8 r_k)\right)
@@ -227,13 +233,13 @@ r_k \le \epsilon_{\mathrm{arr}} \Rightarrow \mathbf{c}_k = \mathbf{0}
 
 #### 3.1 抓取条件
 
-设右手腕（或 palm 参考点）位置 \(\mathbf{h}_{k}\)，候选箱体 \(i\) 位置 \(\mathbf{p}_{i}\)。当
+设右手腕（或 palm 参考点）位置 $\mathbf{h}_k$，候选箱体 $i$ 位置 $\mathbf{p}_i$。当
 
 ```math
 \|\mathbf{h}_k - \mathbf{p}_i\|_2 \le d_{\mathrm{grasp}}
 ```
 
-且当前无持箱对象时，触发抓取（阈值 \(d_{\mathrm{grasp}} = 0.48\) m）。抓取后对该箱体启用 `body_gravcomp`，并通过每步运动学写入消除 weld 约束，避免物理耦合导致机器人倾倒。
+且当前无持箱对象时，触发抓取（阈值 $d_{\mathrm{grasp}} = 0.48$ m）。抓取后对该箱体启用 `body_gravcomp`，并通过每步运动学写入消除 weld 约束，避免物理耦合导致机器人倾倒。
 
 #### 3.2 跟踪模式
 
@@ -249,13 +255,13 @@ r_k \le \epsilon_{\mathrm{arr}} \Rightarrow \mathbf{c}_k = \mathbf{0}
 \mathbf{p}_i^{\mathrm{box}} = \frac{1}{2}(\mathbf{p}_{\mathrm{palm}}^{\mathrm{R}} + \mathbf{p}_{\mathrm{palm}}^{\mathrm{L}}) + \mathbf{R}_{\mathrm{pelvis}} \mathbf{o}_{\mathrm{carry}}
 ```
 
-其中 \(\mathbf{o}_{\mathrm{carry}} = \left[0.02, 0, 0.04\right]^\top\) m（`carry_palm_offset`）。箱体姿态取骨盆偏航角 \(\psi_{k}\) 对应的绕 \(z\) 轴旋转四元数。每步将箱体线速度置零（`qvel` 写入 \(\mathbf{0}\)）以实现运动学锁定。
+其中 $\mathbf{o}_{\mathrm{carry}} = [0.02, 0, 0.04]^\top$ m（`carry_palm_offset`）。箱体姿态取骨盆偏航角 $\psi_k$ 对应的绕 $z$ 轴旋转四元数。每步将箱体线速度置零（`qvel` 写入 $\mathbf{0}$）以实现运动学锁定。
 
 ---
 
 ### 4. 上肢姿态规划
 
-操作阶段（够取 / 抱箱 / 放货）采用**关节空间线性插值**。给定起始姿态 \(\mathbf{q}^{\mathrm{from}}\) 与目标姿态 \(\mathbf{q}^{\mathrm{to}}\)，在第 \(t\) 步（共 \(T\) 步）：
+操作阶段（够取 / 抱箱 / 放货）采用**关节空间线性插值**。给定起始姿态 $\mathbf{q}^{\mathrm{from}}$ 与目标姿态 $\mathbf{q}^{\mathrm{to}}$，在第 $t$ 步（共 $T$ 步）：
 
 ```math
 \mathbf{q}_t = (1-\alpha_t)\mathbf{q}^{\mathrm{from}} + \alpha_t \mathbf{q}^{\mathrm{to}}, \qquad \alpha_t = \min\left(1, \frac{t}{T}\right)
@@ -265,9 +271,9 @@ r_k \le \epsilon_{\mathrm{arr}} \Rightarrow \mathbf{c}_k = \mathbf{0}
 
 | 阶段 | 腰 | 右臂 / 左臂 |
 |------|----|-------------|
-| 够取 REACH | \(\mathbf{0}\) | \(\left[0.10, -0.45, 0.10, 0.30, 0, -0.70, 0\right]^\top\)（左臂 \(y\) 取反） |
-| 抱箱 CARRY | \(\mathbf{0}\) | \(\left[0.15, -0.15, 0.10, 0.15, 0, -0.65, 0\right]^\top\)（左臂 \(y\) 取反） |
-| 放货 PLACE | \(\mathbf{0}\) | \(\left[0.12, -0.40, 0.05, 0.35, 0, -0.55, 0\right]^\top\)（左臂 \(y\) 取反） |
+| 够取 REACH | $\mathbf{0}$ | $[0.10, -0.45, 0.10, 0.30, 0, -0.70, 0]^\top$（左臂 $y$ 取反） |
+| 抱箱 CARRY | $\mathbf{0}$ | $[0.15, -0.15, 0.10, 0.15, 0, -0.65, 0]^\top$（左臂 $y$ 取反） |
+| 放货 PLACE | $\mathbf{0}$ | $[0.12, -0.40, 0.05, 0.35, 0, -0.55, 0]^\top$（左臂 $y$ 取反） |
 
 持箱期间，腰/臂/手关节经 `_kinematic_upper` 直接写入 `qpos`，使上肢不受 RL 摆腿扰动。
 
@@ -275,29 +281,29 @@ r_k \le \epsilon_{\mathrm{arr}} \Rightarrow \mathbf{c}_k = \mathbf{0}
 
 ### 5. 操作阶段骨盆锁定
 
-够取、放货等静态操作阶段启用平面锁定。记锁定位置 \(\bar{x}, \bar{y}, \bar{z}\) 与锁定偏航 \(\bar{\psi}\)。每步后处理：
+够取、放货等静态操作阶段启用平面锁定。记锁定位置 $\bar{x}, \bar{y}, \bar{z}$ 与锁定偏航 $\bar{\psi}$。每步后处理：
 
 ```math
-(x_{k}, y_{k}) \leftarrow (\bar{x}, \bar{y}), \quad (v_{x}, v_{y}) \leftarrow 0
+(x_k, y_k) \leftarrow (\bar{x}, \bar{y}), \quad (v_x, v_y) \leftarrow 0
 ```
 
 ```math
-z_{k} \leftarrow \bar{z}, \quad v_{z} \leftarrow 0
+z_k \leftarrow \bar{z}, \quad v_z \leftarrow 0
 ```
 
-（\(z\) 方向锁定可选。）
+（$z$ 方向锁定可选。）
 
 ```math
-\mathbf{q}_{k}^{\mathrm{ori}} \leftarrow [\cos(\bar{\psi}/2), 0, 0, \sin(\bar{\psi}/2)]^\top, \quad \mathbf{\omega}_{k} \leftarrow \mathbf{0}
+\mathbf{q}_k^{\mathrm{ori}} \leftarrow [\cos(\bar{\psi}/2), 0, 0, \sin(\bar{\psi}/2)]^\top, \quad \mathbf{\omega}_k \leftarrow \mathbf{0}
 ```
 
-腿部执行器写入固定角 \(\mathbf{q}_{\mathrm{leg}}^{\mathrm{fix}}\)（`DEFAULT_LEG`），RL 策略停用。
+腿部执行器写入固定角 $\mathbf{q}_{\mathrm{leg}}^{\mathrm{fix}}$（`DEFAULT_LEG`），RL 策略停用。
 
 ---
 
 ### 6. 放置完成判定
 
-箱体 \(i\) 在时刻 \(k\) 被标记为已放置，当且仅当同时满足：
+箱体 $i$ 在时刻 $k$ 被标记为已放置，当且仅当同时满足：
 
 **空间约束**
 
@@ -317,7 +323,7 @@ z_{k} \leftarrow \bar{z}, \quad v_{z} \leftarrow 0
 p_{i,z} \ge h_{\min}
 ```
 
-其中 \((c_{x}, c_{y}, c_{z})\) 为放置区中心，\((h_{x}, h_{y}, h_{z})\) 为放置区半尺寸；\(v_{\mathrm{th}} = 0.15\,\mathrm{m/s}\)，\(h_{\min} = 0.80\,\mathrm{m}\)，\(\delta_{z} = 0.05\,\mathrm{m}\)。持箱中的箱体（\(i = i_{\mathrm{grasp}}\)）不参与判定。
+其中 $(c_x, c_y, c_z)$ 为放置区中心，$(h_x, h_y, h_z)$ 为放置区半尺寸；$v_{\mathrm{th}} = 0.15$ m/s，$h_{\min} = 0.80$ m，$\delta_z = 0.05$ m。持箱中的箱体（$i = i_{\mathrm{grasp}}$）不参与判定。
 
 ---
 
@@ -329,15 +335,15 @@ p_{i,z} \ge h_{\min}
 F_z = K_z (z_{\mathrm{ref}} - z_{\mathrm{pelvis}}) - C_z v_{z,\mathrm{pelvis}}
 ```
 
-默认 \(z_{\mathrm{ref}} = 0.79\) m，\(K_{z} = 1200\) N/m，\(C_{z} = 120\) N·s/m（`carry_elastic_band`）。
+默认 $z_{\mathrm{ref}} = 0.79$ m，$K_z = 1200$ N/m，$C_z = 120$ N·s/m（`carry_elastic_band`）。
 
 ---
 
 ### 8. 摔倒检测与恢复
 
-**摔倒判定：** 骨盆高度 \(z_{k} < z_{\mathrm{spawn}} - 0.22\) m（\(z_{\mathrm{spawn}} = 0.79\) m）。
+**摔倒判定：** 骨盆高度 $z_k < z_{\mathrm{spawn}} - 0.22$ m（$z_{\mathrm{spawn}} = 0.79$ m）。
 
-**恢复算子 \(\mathcal{R}\)（手动模式 `U` 键）：** 保留当前平面位姿 \((x_{k}, y_{k}, \psi_{k})\) 与持箱索引 \(i_{\mathrm{grasp}}\)，将机器人关节重置为 MuJoCo 关键帧 `stand`，并令
+**恢复算子 $\mathcal{R}$（手动模式 `U` 键）：** 保留当前平面位姿 $(x_k, y_k, \psi_k)$ 与持箱索引 $i_{\mathrm{grasp}}$，将机器人关节重置为 MuJoCo 关键帧 `stand`，并令
 
 ```math
 z_k \leftarrow z_{\mathrm{spawn}}, \qquad \mathbf{v}_k \leftarrow \mathbf{0}
@@ -349,11 +355,11 @@ z_k \leftarrow z_{\mathrm{spawn}}, \qquad \mathbf{v}_k \leftarrow \mathbf{0}
 
 ### 9. 自动演示状态机
 
-`DemoController` 实现有限状态机 \(\mathcal{M} = (\mathcal{Q}, \Sigma, \delta, q_{0})\)，状态包括：
+`DemoController` 实现有限状态机 $\mathcal{M} = (\mathcal{Q}, \Sigma, \delta, q_0)$，状态包括：
 
 `WALK_TO_PICK` · `REACH` · `GRASP` · `STABILIZE` · `WALK_ROUTE` · `PLACE` · `RELEASE` · `RETRACT` · `WALK_BACK`
 
-搬运路径 \(\Gamma = \left[\mathbf{\xi}_{1}, \ldots, \mathbf{\xi}_{m}\right]\) 由配置路点与动态生成的后退/入通道点拼接而成，逐点导航直至 \(\|\mathbf{x}_{k} - \mathbf{\xi}_{j}\|_{2} \le \epsilon_{\mathrm{route}}\) 后切换至 \(\mathbf{\xi}_{j+1}\)。
+搬运路径 $\Gamma = [\mathbf{\xi}_1, \ldots, \mathbf{\xi}_m]$ 由配置路点与动态生成的后退/入通道点拼接而成，逐点导航直至 $\|\mathbf{x}_k - \mathbf{\xi}_j\|_2 \le \epsilon_{\mathrm{route}}$ 后切换至 $\mathbf{\xi}_{j+1}$。
 
 ---
 
@@ -363,11 +369,11 @@ z_k \leftarrow z_{\mathrm{spawn}}, \qquad \mathbf{v}_k \leftarrow \mathbf{0}
 
 | 按键 | 功能 |
 |------|------|
-| `W` / `A` / `S` / `D` 或方向键 | 设定平面路点 \(\mathbf{x}^{\mathrm{tgt}}\) |
+| `W` / `A` / `S` / `D` 或方向键 | 设定平面路点 $\mathbf{x}^{\mathrm{tgt}}$ |
 | `空格` | 清除路点，停止行走 |
 | `G` | 启动够取—抓取—抱箱过渡序列 |
 | `R` | 释放当前持箱 |
-| `U` | 执行恢复算子 \(\mathcal{R}\) |
+| `U` | 执行恢复算子 $\mathcal{R}$ |
 | `Backspace` | 全场景重置 |
 | `Esc` | 退出仿真 |
 
@@ -422,13 +428,13 @@ g1-mujoco-box-challenge/
 
 | 参数 | 默认值 | 说明 |
 |------|--------|------|
-| `spawn.pos` | \(\left[-0.78, 0, 0.79\right]\) | 机器人初始位姿 |
-| `walk.table_stand` | \(\left[2.85, -0.65\right]\) | 放货站位（桌南侧） |
-| `walk.path_lane_y` | \(-0.90\) | 南侧搬运通道 |
-| `walk.pick_south_y` | \(-0.52\) | 第 1 行箱够取站位 |
-| `walk.pick_south_y_row2` | \(-0.32\) | 第 2 行箱够取站位 |
-| `grasp.distance_threshold` | \(0.48\) m | 抓取距离阈值 \(d_{\mathrm{grasp}}\) |
-| `table.top_height` | \(0.73\) m | 放货桌面高度 |
+| `spawn.pos` | $[-0.78, 0, 0.79]$ | 机器人初始位姿 |
+| `walk.table_stand` | $[2.85, -0.65]$ | 放货站位（桌南侧） |
+| `walk.path_lane_y` | $-0.90$ | 南侧搬运通道 |
+| `walk.pick_south_y` | $-0.52$ | 第 1 行箱够取站位 |
+| `walk.pick_south_y_row2` | $-0.32$ | 第 2 行箱够取站位 |
+| `grasp.distance_threshold` | $0.48$ m | 抓取距离阈值 $d_{\mathrm{grasp}}$ |
+| `table.top_height` | $0.73$ m | 放货桌面高度 |
 
 搬运路径示例（`carry_route` 段）：
 
